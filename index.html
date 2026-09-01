@@ -46,8 +46,7 @@
   <meta name="citation_author" content="He, Yulan">
   <meta name="citation_publication_date" content="2026">
   <meta name="citation_conference_title" content="Findings of the Association for Computational Linguistics: EMNLP 2026">
-  <!-- TODO: replace with the arXiv PDF URL once the preprint is live -->
-  <meta name="citation_pdf_url" content="https://kunhao.site/EDIT/static/pdfs/EDIT_paper.pdf">
+  <meta name="citation_pdf_url" content="https://arxiv.org/pdf/2606.06350">
 
   <!-- Additional SEO -->
   <meta name="theme-color" content="#2563eb">
@@ -107,6 +106,9 @@
     .results-table th.rowhead, .results-table td.rowhead { text-align: left; white-space: nowrap; }
     .results-table .ours { background: #eff6ff; }
     .results-table-note { font-size: 0.9rem; color: #64748b; text-align: center; max-width: 720px; margin: 0.75rem auto 0; }
+    /* Figure blocks only carry bottom margin in the template; give the results
+       figures a top margin too so they don't sit against the preceding caption. */
+    .results-figure { margin-top: 4.5rem; }
   </style>
 
   <!-- Structured Data for Academic Papers -->
@@ -218,9 +220,9 @@
 
             <div class="column has-text-centered">
               <div class="publication-links">
-                <!-- Paper PDF (camera-ready). TODO: switch to the arXiv PDF once the preprint is live. -->
+                <!-- arXiv PDF -->
                 <span class="link-block">
-                  <a href="static/pdfs/EDIT_paper.pdf" target="_blank"
+                  <a href="https://arxiv.org/pdf/2606.06350" target="_blank"
                   class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                     <i class="fas fa-file-pdf"></i>
@@ -240,11 +242,9 @@
               </a>
             </span>
 
-            <!-- arXiv abstract page. TODO: fill in the arXiv id once the preprint is live,
-                 then uncomment this block. -->
-            <!--
+            <!-- arXiv abstract page -->
             <span class="link-block">
-              <a href="https://arxiv.org/abs/XXXX.XXXXX" target="_blank"
+              <a href="https://arxiv.org/abs/2606.06350" target="_blank"
               class="external-link button is-normal is-rounded is-dark">
               <span class="icon">
                 <i class="ai ai-arxiv"></i>
@@ -252,7 +252,6 @@
               <span>arXiv</span>
             </a>
           </span>
-            -->
             </div>
           </div>
         </div>
@@ -398,7 +397,7 @@
         baselines' do not.
       </p>
 
-      <figure class="figure-block" style="max-width: 700px; margin-left: auto; margin-right: auto;">
+      <figure class="figure-block results-figure" style="max-width: 620px; margin-left: auto; margin-right: auto;">
         <img src="static/images/rl_dynamics.png" alt="Training dynamics in QWK on ID and OOD test sets for four combinations of base choices (Base, EDIT-SFT) and RL choices (GRPO, EDIT-RL), showing EDIT-SFT plus EDIT-RL is strongest, especially out-of-distribution." loading="lazy"/>
         <figcaption>
           <strong>Both phases matter.</strong> Training dynamics (QWK) of RL choices (GRPO,
@@ -409,7 +408,7 @@
         </figcaption>
       </figure>
 
-      <figure class="figure-block" style="max-width: 560px; margin-left: auto; margin-right: auto;">
+      <figure class="figure-block results-figure" style="max-width: 430px; margin-left: auto; margin-right: auto;">
         <img src="static/images/localiser_positions.png" alt="Histogram of the relative positions of candidate steps selected with and without EDIT's internal-state driven localiser: the base model prefers early steps, while the localiser selects middle and final steps." loading="lazy"/>
         <figcaption>
           <strong>Where do graders actually go wrong?</strong> Relative position of the step selected for
@@ -420,7 +419,7 @@
         </figcaption>
       </figure>
 
-      <div class="content has-text-justified" style="max-width: 720px; margin: 1.5rem auto 0;">
+      <div class="content has-text-justified" style="max-width: 720px; margin: 3rem auto 0;">
         <p>
           <strong>Rule-faithfulness under interventions.</strong> Beyond accuracy, we test whether a
           grader <em>truly follows the rubric</em> by applying deterministic edits to the mark scheme
@@ -453,7 +452,8 @@
   author    = {Wu, Zhihao and Zhang, Linhai and Wang, Taiyi and Zhao, Runcong and Andrews, Peter and Aloisi, Cesare and He, Yulan},
   booktitle = {Findings of the Association for Computational Linguistics: {EMNLP} 2026},
   publisher = {Association for Computational Linguistics},
-  year      = {2026}
+  year      = {2026},
+  url       = {https://arxiv.org/abs/2606.06350}
 }</code></pre>
     </div>
 </section>
