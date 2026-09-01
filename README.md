@@ -2,9 +2,9 @@
 
 [![Project Page](https://img.shields.io/badge/Project-Page-blue)](https://kunhao.site/EDIT/)
 [![Paper](https://img.shields.io/badge/Paper-PDF-red)](https://kunhao.site/EDIT/static/pdfs/EDIT_paper.pdf)
-[![Conference](https://img.shields.io/badge/EMNLP-2026-green)](https://2026.emnlp.org/)
+[![Conference](https://img.shields.io/badge/Findings-EMNLP%202026-green)](https://2026.emnlp.org/)
 
-Official repository for the EMNLP 2026 paper
+Official repository for the EMNLP 2026 Findings paper
 **"EDIT: Evidence-Diagnosed Intervention Training for Rule-Faithful LLM Grading"**
 by Zhihao Wu\*, Linhai Zhang\*, Taiyi Wang\*, Runcong Zhao, Peter Andrews, Cesare Aloisi, and Yulan He
 (\*equal contribution).
@@ -40,7 +40,7 @@ rule-responsive of all evaluated systems.
 @inproceedings{wu2026edit,
   title     = {{EDIT}: Evidence-Diagnosed Intervention Training for Rule-Faithful {LLM} Grading},
   author    = {Wu, Zhihao and Zhang, Linhai and Wang, Taiyi and Zhao, Runcong and Andrews, Peter and Aloisi, Cesare and He, Yulan},
-  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  booktitle = {Findings of the Association for Computational Linguistics: EMNLP 2026},
   publisher = {Association for Computational Linguistics},
   year      = {2026}
 }
