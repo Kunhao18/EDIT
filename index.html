@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="EDIT: Evidence-Diagnosed Intervention Training for Rule-Faithful LLM Grading - Zhihao Wu, Linhai Zhang, Taiyi Wang, Runcong Zhao, Peter Andrews, Cesare Aloisi, Yulan He">
+  <meta name="description" content="EDIT trains rubric-faithful LLM graders: internal belief and grounding signals locate flawed reasoning steps for local rubric-guided revision (EDIT-SFT), then belief-guided reward shaping calibrates RL (EDIT-RL), outperforming strong SFT and RL baselines in- and out-of-domain.">
+  <meta name="keywords" content="LLM Grading, Automated Scoring, Rubric Grading, Credit Assignment, Reinforcement Learning, Process Supervision, Belief Calibration, Large Language Models, EMNLP 2026">
+  <meta name="author" content="Zhihao Wu, Linhai Zhang, Taiyi Wang, Runcong Zhao, Peter Andrews, Cesare Aloisi, Yulan He">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="King's College London, University of Cambridge, AQA, The Alan Turing Institute">
+  <meta property="og:title" content="EDIT: Evidence-Diagnosed Intervention Training for Rule-Faithful LLM Grading">
+  <meta property="og:description" content="EDIT trains rubric-faithful LLM graders: internal belief and grounding signals locate flawed reasoning steps for local rubric-guided revision (EDIT-SFT), then belief-guided reward shaping calibrates RL (EDIT-RL), outperforming strong SFT and RL baselines in- and out-of-domain.">
+  <meta property="og:url" content="https://kunhao.site/EDIT/">
+  <meta property="og:image" content="https://kunhao.site/EDIT/static/images/social_preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The EDIT pipeline: internal-state diagnostics drive atomic revisions (EDIT-SFT) and belief-guided reward shaping (EDIT-RL).">
+  <meta property="article:published_time" content="2026-09-01T00:00:00.000Z">
+  <meta property="article:author" content="Zhihao Wu">
+  <meta property="article:section" content="Research">
+  <meta property="article:tag" content="LLM Grading">
+  <meta property="article:tag" content="Credit Assignment">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="EDIT: Evidence-Diagnosed Intervention Training for Rule-Faithful LLM Grading">
+  <meta name="twitter:description" content="EDIT trains rubric-faithful LLM graders: internal belief and grounding signals locate flawed reasoning steps for local rubric-guided revision (EDIT-SFT), then belief-guided reward shaping calibrates RL (EDIT-RL).">
+  <meta name="twitter:image" content="https://kunhao.site/EDIT/static/images/social_preview.png">
+  <meta name="twitter:image:alt" content="The EDIT pipeline: internal-state diagnostics drive atomic revisions (EDIT-SFT) and belief-guided reward shaping (EDIT-RL).">
+
+  <!-- Academic/Research Specific -->
+  <meta name="citation_title" content="EDIT: Evidence-Diagnosed Intervention Training for Rule-Faithful LLM Grading">
+  <meta name="citation_author" content="Wu, Zhihao">
+  <meta name="citation_author" content="Zhang, Linhai">
+  <meta name="citation_author" content="Wang, Taiyi">
+  <meta name="citation_author" content="Zhao, Runcong">
+  <meta name="citation_author" content="Andrews, Peter">
+  <meta name="citation_author" content="Aloisi, Cesare">
+  <meta name="citation_author" content="He, Yulan">
+  <meta name="citation_publication_date" content="2026">
+  <meta name="citation_conference_title" content="Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing (EMNLP)">
+  <!-- TODO: replace with the arXiv PDF URL once the preprint is live -->
+  <meta name="citation_pdf_url" content="https://kunhao.site/EDIT/static/pdfs/EDIT_paper.pdf">
+
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#2563eb">
+  <meta name="msapplication-TileColor" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://ajax.googleapis.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+
+  <title>EDIT: Evidence-Diagnosed Intervention Training for Rule-Faithful LLM Grading (EMNLP 2026)</title>
+
+  <!-- Favicon and App Icons -->
+  <link rel="icon" type="image/png" href="static/images/web.png">
+  <link rel="apple-touch-icon" href="static/images/web.png">
+
+  <!-- Critical CSS - Load synchronously -->
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <!-- Non-critical CSS - Load asynchronously -->
+  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <!-- Fallback for browsers that don't support preload -->
+  <noscript>
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  </noscript>
+
+  <!-- Fonts - Optimized loading -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Defer non-critical JavaScript -->
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/bulma-carousel.min.js"></script>
+  <script defer src="static/js/bulma-slider.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+
+  <!-- Page-local styles for the results table -->
+  <style>
+    .results-table-wrapper { overflow-x: auto; margin: 1.5rem auto 0.5rem; }
+    .results-table { margin: 0 auto; font-size: 0.95rem; }
+    .results-table th, .results-table td { text-align: center; vertical-align: middle; }
+    .results-table th.rowhead, .results-table td.rowhead { text-align: left; white-space: nowrap; }
+    .results-table .ours { background: #eff6ff; }
+    .results-table-note { font-size: 0.9rem; color: #64748b; text-align: center; max-width: 720px; margin: 0.75rem auto 0; }
+  </style>
+
+  <!-- Structured Data for Academic Papers -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "EDIT: Evidence-Diagnosed Intervention Training for Rule-Faithful LLM Grading",
+    "description": "EDIT is a two-phase framework for training rubric-faithful LLM graders: EDIT-SFT locates flawed reasoning steps with internal posterior-belief and grounding signals and revises them locally under rubric-checklist guidance; EDIT-RL calibrates the grader with belief-guided reward shaping.",
+    "author": [
+      {
+        "@type": "Person",
+        "name": "Zhihao Wu",
+        "affiliation": { "@type": "Organization", "name": "King's College London" }
+      },
+      {
+        "@type": "Person",
+        "name": "Linhai Zhang",
+        "affiliation": { "@type": "Organization", "name": "King's College London" }
+      },
+      {
+        "@type": "Person",
+        "name": "Taiyi Wang",
+        "affiliation": { "@type": "Organization", "name": "University of Cambridge" }
+      },
+      {
+        "@type": "Person",
+        "name": "Runcong Zhao",
+        "affiliation": { "@type": "Organization", "name": "King's College London" }
+      },
+      {
+        "@type": "Person",
+        "name": "Peter Andrews",
+        "affiliation": { "@type": "Organization", "name": "AQA" }
+      },
+      {
+        "@type": "Person",
+        "name": "Cesare Aloisi",
+        "affiliation": { "@type": "Organization", "name": "AQA" }
+      },
+      {
+        "@type": "Person",
+        "name": "Yulan He",
+        "affiliation": { "@type": "Organization", "name": "King's College London" }
+      }
+    ],
+    "datePublished": "2026-09-01",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Association for Computational Linguistics (ACL)"
+    },
+    "url": "https://kunhao.site/EDIT/",
+    "image": "https://kunhao.site/EDIT/static/images/social_preview.png",
+    "keywords": ["LLM Grading", "Automated Scoring", "Rubric Grading", "Credit Assignment", "Reinforcement Learning", "Belief Calibration"],
+    "abstract": "Reliable rubric grading requires more than accurate score prediction. Each judgement must be grounded in the mark scheme and evidence from the student answer. We propose Evidence-Diagnosed Intervention Training (EDIT), a two-phase framework for training more rubric-faithful LLM graders. EDIT-SFT locates problematic reasoning steps using internal model signals and revises only these local steps with help from a rubric checklist. EDIT-RL calibrates the grader with belief-guided reward shaping, penalising large harmful belief drifts while still allowing helpful exploration.",
+    "isAccessibleForFree": true,
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "mainEntity": {
+      "@type": "WebPage",
+      "@id": "https://kunhao.site/EDIT/"
+    },
+    "about": [
+      { "@type": "Thing", "name": "LLM Grading" },
+      { "@type": "Thing", "name": "Credit Assignment" }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <main id="main-content">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">EDIT: Evidence-Diagnosed Intervention Training</h1>
+            <h2 class="title is-4 publication-title" style="margin-top:-0.5rem;">for Rule-Faithful LLM Grading</h2>
+            <div class="is-size-5 publication-authors">
+              <!-- TODO (optional): add personal homepages for the remaining authors by wrapping their
+                   names in <a href="..." target="_blank">...</a>. -->
+              <span class="author-block">
+                <a href="https://kunhao.site" target="_blank">Zhihao Wu</a><sup>*,1</sup>,</span>
+              <span class="author-block">Linhai Zhang<sup>*,1</sup>,</span>
+              <span class="author-block">Taiyi Wang<sup>*,2</sup>,</span>
+              <span class="author-block">
+                <a href="mailto:runcong.zhao@kcl.ac.uk" target="_blank">Runcong Zhao</a><sup>1</sup>,</span>
+              <span class="author-block">Peter Andrews<sup>3</sup>,</span>
+              <span class="author-block">Cesare Aloisi<sup>3</sup>,</span>
+              <span class="author-block">
+                <a href="mailto:yulan.he@kcl.ac.uk" target="_blank">Yulan He</a><sup>&dagger;,1,4</sup>
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>King's College London &nbsp;
+                <sup>2</sup>University of Cambridge &nbsp;
+                <sup>3</sup>AQA &nbsp;
+                <sup>4</sup>The Alan Turing Institute</span>
+              <br>
+              <span class="author-block">Conference on Empirical Methods in Natural Language Processing (EMNLP), 2026</span>
+              <span class="eql-cntrb"><small><br><sup>*</sup>Indicates Equal Contribution &nbsp;&nbsp; <sup>&dagger;</sup>Corresponding Author</small></span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- Paper PDF (camera-ready). TODO: switch to the arXiv PDF once the preprint is live. -->
+                <span class="link-block">
+                  <a href="static/pdfs/EDIT_paper.pdf" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+
+              <!-- GitHub code -->
+              <span class="link-block">
+                <a href="https://github.com/Kunhao18/EDIT" target="_blank"
+                class="external-link button is-normal is-rounded is-dark">
+                <span class="icon">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Code</span>
+              </a>
+            </span>
+
+            <!-- arXiv abstract page. TODO: fill in the arXiv id once the preprint is live,
+                 then uncomment this block. -->
+            <!--
+            <span class="link-block">
+              <a href="https://arxiv.org/abs/XXXX.XXXXX" target="_blank"
+              class="external-link button is-normal is-rounded is-dark">
+              <span class="icon">
+                <i class="ai ai-arxiv"></i>
+              </span>
+              <span>arXiv</span>
+            </a>
+          </span>
+            -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Teaser figure (belief-guided atomic revision example) -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <figure class="figure-block" style="max-width: 620px; margin-left: auto; margin-right: auto;">
+        <img src="static/images/teaser.png" alt="A 4-mark grading question where the standard grader rejects two correct phrases due to wording mismatches, shifting its belief away from the gold mark; EDIT revises only that step and restores the correct mark of 4/4." />
+        <figcaption>
+          <strong>A single misaligned judgement derails the grade.</strong> On this 4-mark question, the
+          grader correctly credits two criteria (S1&ndash;2), but then rejects two correct phrases due to
+          wording mismatches (S3), shifting its belief away from the gold mark and concluding 2/4.
+          <span style="font-variant: small-caps;">Edit</span> locally revises only that step (S3&prime;),
+          linking each disputed phrase to its rubric criterion, which pulls the belief trajectory back to
+          the gold mark and restores the correct mark of 4/4.
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+<!-- End teaser figure -->
+
+<!-- Paper abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Reliable rubric grading requires more than accurate score prediction. Each judgement must be
+            grounded in the mark scheme and evidence from the student answer. Existing credit-assignment
+            and intervention methods, primarily designed for self-contained reasoning tasks such as
+            mathematics reasoning, struggle in this setting because they do not identify where grading
+            reasoning goes wrong or how the model's belief about the final mark changes during reasoning.
+            We propose Evidence-Diagnosed Intervention Training (<strong>EDIT</strong>), a two-phase
+            framework for training more rubric-faithful LLM graders. First, <strong>EDIT-SFT</strong>
+            locates problematic reasoning steps using internal model signals: posterior belief over the
+            final mark and input-grounding scores. It then revises only these local steps with help from a
+            rubric checklist. Second, <strong>EDIT-RL</strong> calibrates the grader with belief-guided
+            reward shaping, penalising large harmful belief drifts while still allowing helpful
+            exploration. Experiments on two real-world, multi-subject grading benchmarks demonstrate that
+            EDIT consistently outperforms strong supervised fine-tuning and reinforcement learning
+            baselines on both in-domain and out-of-domain splits, with ablation studies confirming that
+            internal-state diagnostics drive these gains. Under deterministic rubric-edit interventions,
+            EDIT-SFT is the most rule-responsive of all evaluated systems, and EDIT-RL largely retains
+            this responsiveness while improving accuracy.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+
+<!-- Method -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">How EDIT Works</h2>
+      <figure class="figure-block method-figure">
+        <img src="static/images/method.png" alt="Overview of the EDIT pipeline: internal-state signals (posterior belief probe and grounding audits) locate flawed substeps; a rubric checklist guides atomic local revisions that are regenerated, filtered, and used for SFT; the SFT policy is then calibrated with GRPO using a belief-guided shaped reward." loading="lazy"/>
+        <figcaption>
+          <strong>The EDIT pipeline.</strong> Both phases read the same internal quantity: the model's
+          posterior belief over the final mark. <strong>Phase&nbsp;1 (EDIT-SFT):</strong> for incorrect
+          rollouts, internal-state signals &mdash; a posterior belief probe and masked-support grounding
+          audits &mdash; locate and rank flawed substeps. A per-response rubric checklist is provided to
+          the reviser as privileged input to produce atomic corrective edits under a locality constraint,
+          and the corrected trajectories are aggregated for supervised fine-tuning.
+          <strong>Phase&nbsp;2 (EDIT-RL):</strong> the SFT policy is further calibrated with GRPO,
+          augmented with a threshold-respecting, belief-guided reward computed from a frozen posterior
+          probe that penalises harmful mid-trajectory belief excursions while tolerating benign exploration.
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+<!-- End method -->
+
+
+<!-- Results -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Results</h2>
+
+      <div class="results-table-wrapper">
+        <table class="table is-bordered is-hoverable results-table">
+          <thead>
+            <tr>
+              <th class="rowhead">Dataset (split)</th>
+              <th>Base</th>
+              <th>GRPO</th>
+              <th>DGPO</th>
+              <th>InT</th>
+              <th class="ours">EDIT-SFT</th>
+              <th class="ours">EDIT-RL</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="rowhead">SAS &mdash; avg. of 3 subjects (OOD)</td>
+              <td>0.727</td><td>0.689</td><td>0.721</td><td>0.731</td>
+              <td class="ours">0.781</td><td class="ours"><strong>0.794</strong></td>
+            </tr>
+            <tr>
+              <td class="rowhead">Private-Biology (ID)</td>
+              <td>0.701</td><td>0.727</td><td>0.704</td><td>0.648</td>
+              <td class="ours">0.738</td><td class="ours"><strong>0.754</strong></td>
+            </tr>
+            <tr>
+              <td class="rowhead">Private-Biology (OOD)</td>
+              <td>0.524</td><td>0.535</td><td>0.533</td><td>0.508</td>
+              <td class="ours">0.548</td><td class="ours"><strong>0.575</strong></td>
+            </tr>
+            <tr>
+              <td class="rowhead">Private-Physics (ID)</td>
+              <td>0.477</td><td>0.480</td><td>0.535</td><td>0.551</td>
+              <td class="ours">0.527</td><td class="ours"><strong>0.555</strong></td>
+            </tr>
+            <tr>
+              <td class="rowhead">Private-Physics (OOD)</td>
+              <td>0.456</td><td>0.465</td><td>0.449</td><td>0.409</td>
+              <td class="ours">0.472</td><td class="ours"><strong>0.487</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="results-table-note">
+        <strong>Grading accuracy (QWK, higher is better).</strong> Quadratic weighted kappa on the SAS
+        benchmark (History, Geography, Physics; all questions unseen in training) and the proprietary
+        Private-Science benchmark, with Qwen3-8B as the policy model for every method. The InT column
+        reports its final RL stage. EDIT-RL is best on every dataset and split, and question-level
+        cluster-bootstrap tests show its SAS gains remain significant after Holm correction while the
+        baselines' do not.
+      </p>
+
+      <figure class="figure-block">
+        <img src="static/images/rl_dynamics.png" alt="Training dynamics in QWK on ID and OOD test sets for four combinations of base choices (Base, EDIT-SFT) and RL choices (GRPO, EDIT-RL), showing EDIT-SFT plus EDIT-RL is strongest, especially out-of-distribution." loading="lazy"/>
+        <figcaption>
+          <strong>Both phases matter.</strong> Training dynamics (QWK) of RL choices (GRPO,
+          EDIT-RL) applied to either the base model or the EDIT-SFT checkpoint on Private-Biology.
+          Starting from EDIT-SFT dominates starting from the base model, and belief-guided EDIT-RL
+          gives a further consistent lift over plain GRPO &mdash; most visibly on the out-of-distribution
+          split, where EDIT-SFT + EDIT-RL is the clear strongest combination.
+        </figcaption>
+      </figure>
+
+      <figure class="figure-block" style="max-width: 560px; margin-left: auto; margin-right: auto;">
+        <img src="static/images/localiser_positions.png" alt="Histogram of the relative positions of candidate steps selected with and without EDIT's internal-state driven localiser: the base model prefers early steps, while the localiser selects middle and final steps." loading="lazy"/>
+        <figcaption>
+          <strong>Where do graders actually go wrong?</strong> Relative position of the step selected for
+          revision with and without EDIT's internal-state localiser. Prompt-based self-audits gravitate
+          to early steps, whereas the localiser selects middle or final steps, where credit synthesis
+          typically occurs &mdash; and ablations confirm this localisation is the largest single
+          contributor to EDIT's gains.
+        </figcaption>
+      </figure>
+
+      <div class="content has-text-justified" style="max-width: 720px; margin: 1.5rem auto 0;">
+        <p>
+          <strong>Rule-faithfulness under interventions.</strong> Beyond accuracy, we test whether a
+          grader <em>truly follows the rubric</em> by applying deterministic edits to the mark scheme
+          whose gold-score change is known exactly, and measuring how closely the model's score change
+          tracks it. EDIT-SFT is the most rule-responsive of all evaluated systems (mean absolute
+          deviation from perfect responsiveness of 0.285 vs. 0.412 for the base grader), and EDIT-RL
+          largely retains this responsiveness while improving accuracy. Points-total rescaling remains
+          unsolved for every evaluated system, exposing absolute-count anchoring as an open challenge
+          that accuracy metrics alone cannot detect.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End results -->
+
+
+<!--BibTex citation -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre id="bibtex-code"><code>@inproceedings{wu2026edit,
+  title     = {{EDIT}: Evidence-Diagnosed Intervention Training for Rule-Faithful {LLM} Grading},
+  author    = {Wu, Zhihao and Zhang, Linhai and Wang, Taiyi and Zhao, Runcong and Andrews, Peter and Aloisi, Cesare and He, Yulan},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  publisher = {Association for Computational Linguistics},
+  year      = {2026}
+}</code></pre>
+    </div>
+</section>
+<!--End BibTex citation -->
+
+
+  <footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Statcounter tracking code -->
+
+<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+    <!-- End of Statcounter Code -->
+
+  </body>
+  </html>
