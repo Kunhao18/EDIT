@@ -98,6 +98,9 @@
 
   <!-- Page-local styles for the results table -->
   <style>
+    /* The pipeline figure is very wide (2667px source) — let it use the full
+       widescreen container instead of the template's 720px cap. */
+    .method-figure { max-width: 100%; }
     .results-table-wrapper { overflow-x: auto; margin: 1.5rem auto 0.5rem; }
     .results-table { margin: 0 auto; font-size: 0.95rem; }
     .results-table th, .results-table td { text-align: center; vertical-align: middle; }
@@ -195,8 +198,7 @@
                 <a href="https://kunhao.site" target="_blank">Zhihao Wu</a><sup>*,1</sup>,</span>
               <span class="author-block">Linhai Zhang<sup>*,1</sup>,</span>
               <span class="author-block">Taiyi Wang<sup>*,2</sup>,</span>
-              <span class="author-block">
-                <a href="mailto:runcong.zhao@kcl.ac.uk" target="_blank">Runcong Zhao</a><sup>1</sup>,</span>
+              <span class="author-block">Runcong Zhao<sup>1</sup>,</span>
               <span class="author-block">Peter Andrews<sup>3</sup>,</span>
               <span class="author-block">Cesare Aloisi<sup>3</sup>,</span>
               <span class="author-block">
@@ -264,7 +266,7 @@
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <figure class="figure-block" style="max-width: 620px; margin-left: auto; margin-right: auto;">
+      <figure class="figure-block" style="max-width: 680px; margin-left: auto; margin-right: auto;">
         <img src="static/images/teaser.png" alt="A 4-mark grading question where the standard grader rejects two correct phrases due to wording mismatches, shifting its belief away from the gold mark; EDIT revises only that step and restores the correct mark of 4/4." />
         <figcaption>
           <strong>A single misaligned judgement derails the grade.</strong> On this 4-mark question, the
@@ -317,7 +319,7 @@
 <!-- Method -->
 <section class="hero is-small">
   <div class="hero-body">
-    <div class="container is-max-desktop">
+    <div class="container is-max-widescreen">
       <h2 class="title is-3 has-text-centered">How EDIT Works</h2>
       <figure class="figure-block method-figure">
         <img src="static/images/method.png" alt="Overview of the EDIT pipeline: internal-state signals (posterior belief probe and grounding audits) locate flawed substeps; a rubric checklist guides atomic local revisions that are regenerated, filtered, and used for SFT; the SFT policy is then calibrated with GRPO using a belief-guided shaped reward." loading="lazy"/>
@@ -396,7 +398,7 @@
         baselines' do not.
       </p>
 
-      <figure class="figure-block">
+      <figure class="figure-block" style="max-width: 700px; margin-left: auto; margin-right: auto;">
         <img src="static/images/rl_dynamics.png" alt="Training dynamics in QWK on ID and OOD test sets for four combinations of base choices (Base, EDIT-SFT) and RL choices (GRPO, EDIT-RL), showing EDIT-SFT plus EDIT-RL is strongest, especially out-of-distribution." loading="lazy"/>
         <figcaption>
           <strong>Both phases matter.</strong> Training dynamics (QWK) of RL choices (GRPO,
