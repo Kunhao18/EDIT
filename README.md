@@ -1,7 +1,7 @@
 # EDIT — Project Page
 
 This branch (`page`) hosts the project homepage for
-**EDIT: Evidence-Diagnosed Intervention Training for Rule-Faithful LLM Grading** (EMNLP 2026),
+**EDIT: Evidence-Diagnosed Intervention Training for Rule-Faithful LLM Grading** (Findings of EMNLP 2026),
 served via GitHub Pages at <https://kunhao.site/EDIT/>.
 
 - Edit `index.html` for content; styles live in `static/css/index.css`.
